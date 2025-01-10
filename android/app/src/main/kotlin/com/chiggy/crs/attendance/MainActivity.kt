@@ -1,4 +1,4 @@
-package com.example.crs_attendance
+package com.chiggy.crs.attendance
 
 import io.flutter.embedding.android.FlutterActivity
 
