@@ -32,7 +32,7 @@ class SettingsNotifier extends _$SettingsNotifier {
     await save();
   }
 
-  Future<void> restoreSettings(SettingsModel settings) async {
+  Future<void> updateSettings(SettingsModel settings) async {
     state = AsyncData(settings);
     await save();
   }

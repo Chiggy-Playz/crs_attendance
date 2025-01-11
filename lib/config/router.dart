@@ -1,7 +1,9 @@
+import 'package:crs_attendance/pages/employees/employees_view.dart';
 import 'package:crs_attendance/pages/home/home_view.dart';
 import 'package:crs_attendance/pages/home_shell_page.dart';
 import 'package:crs_attendance/pages/loading/loading_page.dart';
 import 'package:crs_attendance/pages/login/login.dart';
+import 'package:crs_attendance/pages/settings/settings_view.dart';
 import 'package:crs_attendance/pages/unauthorized/unauthorized.dart';
 import 'package:crs_attendance/providers/auth/provider.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +70,26 @@ GoRouter router(Ref ref) {
                 path: HomeView.routePath,
                 builder: (context, state) {
                   return const HomeView();
+                },
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: EmployeesView.routePath,
+                builder: (context, state) {
+                  return const EmployeesView();
+                },
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: SettingsView.routePath,
+                builder: (context, state) {
+                  return const SettingsView();
                 },
               ),
             ],
