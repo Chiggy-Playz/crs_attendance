@@ -1,6 +1,7 @@
 import 'package:crs_attendance/pages/home/home_view.dart';
 import 'package:crs_attendance/pages/loading/loading_page.dart';
 import 'package:crs_attendance/pages/login/login.dart';
+import 'package:crs_attendance/pages/unauthorized/unauthorized.dart';
 import 'package:crs_attendance/providers/auth/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,14 +27,18 @@ GoRouter router(Ref ref) {
 
       // This has to do with how the FirebaseAuth SDK handles the "log-in" state
       // Returning `null` means "we are not authorized"
-      final isAuth = authState.valueOrNull != null;
+      final isAuth = authState.valueOrNull?.isAuthenticated ?? false;
+      final isAdmin = authState.valueOrNull?.isAdmin ?? false;
 
       final isSplash = state.matchedLocation == LoadingPage.routePath;
+      final isLoggingIn = state.matchedLocation == LoginPage.routePath;
+
       if (isSplash) {
-        return isAuth ? HomeView.routePath : LoginPage.routePath;
+        if (!isAuth) return LoginPage.routePath;
+        if (!isAdmin) return UnauthorizedPage.routePath;
+        return HomeView.routePath;
       }
 
-      final isLoggingIn = state.matchedLocation == LoginPage.routePath;
       if (isLoggingIn) return isAuth ? HomeView.routePath : null;
 
       return isAuth ? null : LoadingPage.routePath;
@@ -46,6 +51,10 @@ GoRouter router(Ref ref) {
       GoRoute(
         path: LoginPage.routePath,
         builder: (context, state) => const LoginPage(),
+      ),
+      GoRoute(
+        path: UnauthorizedPage.routePath,
+        builder: (context, state) => const UnauthorizedPage(),
       ),
       GoRoute(
         path: HomeView.routePath,

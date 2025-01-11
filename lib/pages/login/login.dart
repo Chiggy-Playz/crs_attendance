@@ -1,6 +1,8 @@
 import 'package:crs_attendance/config/extensions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -14,43 +16,73 @@ class LoginPage extends ConsumerStatefulWidget {
 
 class _LoginPageState extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  bool showPassword = false;
-
-  String email = "";
-  String password = "";
-
-  bool isLoading = false;
-
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: !isLoading,
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          title: const Text("Login"),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: const Text("Login"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Center(
           child: Form(
             key: _formKey,
-            child: ListView(
-              children: [
-                const SizedBox(height: 48),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Login",
-                    style: context.textTheme.headlineMedium,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                
-              ],
+            child: FilledButton.icon(
+              icon: Image.asset(
+                'assets/images/google.png',
+                height: 32,
+              ),
+              label: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Text("Sign in with Google"),
+              ),
+              onPressed: handleLogin,
             ),
           ),
         ),
       ),
     );
+  }
+
+  Future<void> handleLogin() async {
+    final user = await signInWithGoogle();
+    if (user == null) {
+      if (!mounted) return;
+      context.showErrorSnackBar("Failed to sign in");
+      return;
+    }
+  }
+
+  Future<User?> signInWithGoogle() async {
+    try {
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      if (googleUser == null) {
+        return null;
+      }
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      final userCreds =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      return userCreds.user;
+    } catch (error) {
+      // TODO: Add talker
+      print(error);
+    }
+
+    return null;
   }
 }
