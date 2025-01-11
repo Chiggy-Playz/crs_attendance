@@ -1,4 +1,5 @@
 import 'package:crs_attendance/pages/home/home_view.dart';
+import 'package:crs_attendance/pages/home_shell_page.dart';
 import 'package:crs_attendance/pages/loading/loading_page.dart';
 import 'package:crs_attendance/pages/login/login.dart';
 import 'package:crs_attendance/pages/unauthorized/unauthorized.dart';
@@ -56,9 +57,22 @@ GoRouter router(Ref ref) {
         path: UnauthorizedPage.routePath,
         builder: (context, state) => const UnauthorizedPage(),
       ),
-      GoRoute(
-        path: HomeView.routePath,
-        builder: (context, state) => const HomeView(),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigatorShell) {
+          return HomeShellPage(navigatorShell: navigatorShell);
+        },
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: HomeView.routePath,
+                builder: (context, state) {
+                  return const HomeView();
+                },
+              ),
+            ],
+          ),
+        ],
       ),
     ],
   );

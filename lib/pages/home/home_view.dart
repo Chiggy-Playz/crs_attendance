@@ -5,7 +5,7 @@ class HomeView extends ConsumerStatefulWidget {
   const HomeView({super.key});
 
   static const String routePath = "/home";
-  static const String routeNam = "home";
+  static const String routeName = "Home";
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _HomeViewState();
@@ -14,6 +14,6 @@ class HomeView extends ConsumerStatefulWidget {
 class _HomeViewState extends ConsumerState<HomeView> {
   @override
   Widget build(BuildContext context) {
-    return const Text("Home");
+    return Container();
   }
 }
