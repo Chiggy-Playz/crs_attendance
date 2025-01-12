@@ -1,3 +1,4 @@
+import 'package:crs_attendance/pages/employees/employee_page.dart';
 import 'package:crs_attendance/pages/employees/employees_view.dart';
 import 'package:crs_attendance/pages/home/home_view.dart';
 import 'package:crs_attendance/pages/home_shell_page.dart';
@@ -96,6 +97,14 @@ GoRouter router(Ref ref) {
           ),
         ],
       ),
+      GoRoute(
+        path: EmployeePage.routePath,
+        name: EmployeePage.routeName,
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return EmployeePage(id: id == "new" ? null : id);
+        },
+      )
     ],
   );
 

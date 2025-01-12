@@ -13,6 +13,7 @@ class EmployeeModelMapper extends ClassMapperBase<EmployeeModel> {
   static EmployeeModelMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = EmployeeModelMapper._());
+      MapperContainer.globals.useAll([ColorMapper()]);
     }
     return _instance!;
   }
@@ -28,6 +29,9 @@ class EmployeeModelMapper extends ClassMapperBase<EmployeeModel> {
   static const Field<EmployeeModel, Color> _f$color = Field('color', _$color);
   static int _$salary(EmployeeModel v) => v.salary;
   static const Field<EmployeeModel, int> _f$salary = Field('salary', _$salary);
+  static bool _$disabled(EmployeeModel v) => v.disabled;
+  static const Field<EmployeeModel, bool> _f$disabled =
+      Field('disabled', _$disabled, opt: true, def: false);
 
   @override
   final MappableFields<EmployeeModel> fields = const {
@@ -35,6 +39,7 @@ class EmployeeModelMapper extends ClassMapperBase<EmployeeModel> {
     #name: _f$name,
     #color: _f$color,
     #salary: _f$salary,
+    #disabled: _f$disabled,
   };
 
   static EmployeeModel _instantiate(DecodingData data) {
@@ -42,7 +47,8 @@ class EmployeeModelMapper extends ClassMapperBase<EmployeeModel> {
         id: data.dec(_f$id),
         name: data.dec(_f$name),
         color: data.dec(_f$color),
-        salary: data.dec(_f$salary));
+        salary: data.dec(_f$salary),
+        disabled: data.dec(_f$disabled));
   }
 
   @override
@@ -98,7 +104,8 @@ extension EmployeeModelValueCopy<$R, $Out>
 
 abstract class EmployeeModelCopyWith<$R, $In extends EmployeeModel, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
-  $R call({String? id, String? name, Color? color, int? salary});
+  $R call(
+      {String? id, String? name, Color? color, int? salary, bool? disabled});
   EmployeeModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -111,19 +118,26 @@ class _EmployeeModelCopyWithImpl<$R, $Out>
   late final ClassMapperBase<EmployeeModel> $mapper =
       EmployeeModelMapper.ensureInitialized();
   @override
-  $R call({String? id, String? name, Color? color, int? salary}) =>
+  $R call(
+          {String? id,
+          String? name,
+          Color? color,
+          int? salary,
+          bool? disabled}) =>
       $apply(FieldCopyWithData({
         if (id != null) #id: id,
         if (name != null) #name: name,
         if (color != null) #color: color,
-        if (salary != null) #salary: salary
+        if (salary != null) #salary: salary,
+        if (disabled != null) #disabled: disabled
       }));
   @override
   EmployeeModel $make(CopyWithData data) => EmployeeModel(
       id: data.get(#id, or: $value.id),
       name: data.get(#name, or: $value.name),
       color: data.get(#color, or: $value.color),
-      salary: data.get(#salary, or: $value.salary));
+      salary: data.get(#salary, or: $value.salary),
+      disabled: data.get(#disabled, or: $value.disabled));
 
   @override
   EmployeeModelCopyWith<$R2, EmployeeModel, $Out2> $chain<$R2, $Out2>(

@@ -25,7 +25,7 @@ final employeeRepositoryProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef EmployeeRepositoryRef = AutoDisposeProviderRef<EmployeeRepository>;
-String _$employeesHash() => r'56d82220d1585f9255e5567681d86fead8e552fc';
+String _$employeesHash() => r'b946d8821c5a90b0548afc72251e2c14640a8d39';
 
 /// See also [employees].
 @ProviderFor(employees)

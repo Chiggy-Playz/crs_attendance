@@ -1,7 +1,9 @@
+import 'package:crs_attendance/pages/employees/employee_page.dart';
 import 'package:crs_attendance/providers/employees/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class EmployeesView extends ConsumerStatefulWidget {
   const EmployeesView({super.key});
@@ -43,6 +45,13 @@ class _EmployeesViewState extends ConsumerState<EmployeesView> {
                 width: 32,
               ),
               title: Text(employee.name),
+              subtitle: employee.disabled ? const Text('Disabled') : null,
+              onTap: () {
+                context.pushNamed(
+                  EmployeePage.routeName,
+                  pathParameters: {'id': employee.id},
+                );
+              },
             );
           },
         );

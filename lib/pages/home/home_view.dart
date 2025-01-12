@@ -6,7 +6,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 class HomeView extends ConsumerStatefulWidget {
   const HomeView({super.key});
 
-  static const String routePath = "/home";
+  static const String routePath = "/";
   static const String routeName = "Home";
 
   @override

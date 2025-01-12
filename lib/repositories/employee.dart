@@ -6,7 +6,8 @@ class EmployeeRepository {
 
   EmployeeRepository(this._firestore);
 
-  CollectionReference get _employeesCollection => _firestore.collection('employees');
+  CollectionReference get _employeesCollection =>
+      _firestore.collection('employees');
 
   Stream<List<EmployeeModel>> watchEmployees() {
     return _employeesCollection.snapshots().map((snapshot) {
@@ -20,8 +21,19 @@ class EmployeeRepository {
     });
   }
 
+  Future<EmployeeModel?> getEmployee(String id) async {
+    final doc = await _employeesCollection.doc(id).get();
+    if (!doc.exists) return null;
+
+    final data = doc.data() as Map<String, dynamic>;
+    return EmployeeModel.fromJson({
+      ...data,
+      'id': doc.id,
+    });
+  }
+
   Future<void> addEmployee(EmployeeModel employee) {
-    return _employeesCollection.add(employee.toJson());
+    return _employeesCollection.add(employee.toJson()..remove('id'));
   }
 
   Future<void> updateEmployee(EmployeeModel employee) {

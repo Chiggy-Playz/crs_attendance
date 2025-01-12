@@ -1,8 +1,8 @@
+import 'package:crs_attendance/pages/employees/employee_page.dart';
 import 'package:crs_attendance/providers/home/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 const navigationBarDestinations = [
   NavigationDestination(
@@ -55,14 +55,29 @@ class HomeShellPage extends ConsumerWidget {
     );
   }
 
-  FloatingActionButton? getFAB(CalendarController calendarController) {
+  FloatingActionButton? getFAB(BuildContext context, WidgetRef ref) {
+    switch (index) {
+      case 0:
+        return FloatingActionButton(
+          onPressed: () {},
+          child: const Icon(Icons.today_rounded),
+        );
+      case 1:
+        return FloatingActionButton(
+          onPressed: () {
+            GoRouter.of(context).pushNamed(
+              EmployeePage.routeName,
+              pathParameters: {"id": "new"},
+            );
+          },
+          child: const Icon(Icons.add),
+        );
+    }
     return null;
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final calendarController = ref.watch(calendarControllerProvider);
-
     return Scaffold(
       appBar: getAppBar(context, ref),
       body: navigatorShell,
@@ -71,7 +86,7 @@ class HomeShellPage extends ConsumerWidget {
         destinations: navigationBarDestinations,
         onDestinationSelected: onNavigationBarClicked,
       ),
-      floatingActionButton: getFAB(calendarController),
+      floatingActionButton: getFAB(context, ref),
     );
   }
 
