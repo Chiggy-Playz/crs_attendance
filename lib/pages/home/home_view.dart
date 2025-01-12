@@ -1,6 +1,8 @@
+import 'package:crs_attendance/pages/attendance/attendance_page.dart';
 import 'package:crs_attendance/providers/home/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class HomeView extends ConsumerStatefulWidget {
@@ -21,14 +23,15 @@ class _HomeViewState extends ConsumerState<HomeView> {
       view: CalendarView.month,
       controller: controller,
       showDatePickerButton: true,
-      // appointmentBuilder: (context, calendarAppointmentDetails) {
-      //   return Text("AA");
-      // },
-      monthViewSettings: MonthViewSettings(
+      monthViewSettings: const MonthViewSettings(
         appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
       ),
       timeZone: "Asia/Calcutta",
-      onTap: (calendarTapDetails) {},
+      onTap: (calendarTapDetails) {
+        context.pushNamed(AttendancePage.routeName, queryParameters: {
+          "date": calendarTapDetails.date!.toIso8601String(),
+        });
+      },
       dataSource: _getCalendarDataSource(),
     );
   }

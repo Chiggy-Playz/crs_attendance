@@ -1,3 +1,4 @@
+import 'package:crs_attendance/pages/attendance/attendance_page.dart';
 import 'package:crs_attendance/pages/employees/employee_page.dart';
 import 'package:crs_attendance/providers/home/provider.dart';
 import 'package:flutter/material.dart';
@@ -59,18 +60,22 @@ class HomeShellPage extends ConsumerWidget {
     switch (index) {
       case 0:
         return FloatingActionButton(
-          onPressed: () {},
           child: const Icon(Icons.today_rounded),
+          onPressed: () {
+            context.pushNamed(AttendancePage.routeName, queryParameters: {
+              "date": DateTime.now().toIso8601String(),
+            });
+          },
         );
       case 1:
         return FloatingActionButton(
+          child: const Icon(Icons.add),
           onPressed: () {
             GoRouter.of(context).pushNamed(
               EmployeePage.routeName,
               pathParameters: {"id": "new"},
             );
           },
-          child: const Icon(Icons.add),
         );
     }
     return null;

@@ -56,4 +56,8 @@ extension DateTimeExtensions on DateTime {
   ]) {
     return DateFormat(format.value).format(this);
   }
+
+  DateTime onlyDate() {
+    return DateTime(year, month, day);
+  }
 }

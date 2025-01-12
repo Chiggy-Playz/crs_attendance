@@ -1,5 +1,6 @@
 import 'package:crs_attendance/pages/employees/employee_page.dart';
 import 'package:crs_attendance/providers/employees/provider.dart';
+import 'package:crs_attendance/widgets/color_listtile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -21,6 +22,7 @@ class _EmployeesViewState extends ConsumerState<EmployeesView> {
     final employees = ref.watch(employeesProvider);
     return employees.when(
       data: (employees) {
+        employees.sort((a, b) => a.name.compareTo(b.name),);
         if (employees.isEmpty) {
           return const Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -36,14 +38,8 @@ class _EmployeesViewState extends ConsumerState<EmployeesView> {
           itemCount: employees.length,
           itemBuilder: (context, index) {
             final employee = employees[index];
-            return ListTile(
-              leading: Container(
-                decoration: BoxDecoration(
-                  color: employee.color,
-                  shape: BoxShape.circle,
-                ),
-                width: 32,
-              ),
+            return ColorListTile(
+              color: employee.color,
               title: Text(employee.name),
               subtitle: employee.disabled ? const Text('Disabled') : null,
               onTap: () {

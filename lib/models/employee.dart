@@ -20,19 +20,21 @@ class ColorMapper extends SimpleMapper<Color> {
   }
 }
 
-@MappableClass(includeCustomMappers: [ColorMapper()])
+@MappableClass(includeCustomMappers: [ColorMapper()],)
 class EmployeeModel with EmployeeModelMappable {
   final String id;
   final String name;
   final Color color;
   final int salary;
   final bool disabled;
+  DateTime createdAt;
 
   EmployeeModel({
     required this.id,
     required this.name,
     required this.color,
     required this.salary,
+    required this.createdAt,
     this.disabled = false,
   });
 

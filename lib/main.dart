@@ -1,4 +1,6 @@
 import 'package:crs_attendance/app.dart';
+import 'package:crs_attendance/config/mappers.dart';
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,5 +11,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  MapperContainer.globals.use(const LocalDateTimeMapper());
   runApp(const ProviderScope(child: CrsAttendanceApp()));
 }

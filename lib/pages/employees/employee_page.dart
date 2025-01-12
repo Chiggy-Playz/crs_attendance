@@ -23,6 +23,7 @@ class _EmployeePageState extends ConsumerState<EmployeePage> {
   String? get id => widget.id;
   bool get isCreating => id == null;
   final _formKey = GlobalKey<FormState>();
+  EmployeeModel? _existingEmployee;
 
   String _name = '';
   int _salary = 0;
@@ -41,19 +42,19 @@ class _EmployeePageState extends ConsumerState<EmployeePage> {
     if (id == null) return;
     setState(() => _isLoading = true);
     try {
-      final employee =
+      _existingEmployee =
           await ref.read(employeeRepositoryProvider).getEmployee(id!);
       if (!mounted) return;
-      if (employee == null) {
+      if (_existingEmployee == null) {
         // Handle error
         context.showSnackBar("Employee not found");
         return;
       }
       setState(() {
-        _name = employee.name;
-        _salary = employee.salary;
-        _color = employee.color;
-        _disabled = employee.disabled;
+        _name = _existingEmployee!.name;
+        _salary = _existingEmployee!.salary;
+        _color = _existingEmployee!.color;
+        _disabled = _existingEmployee!.disabled;
       });
     } catch (e) {
       context.showErrorSnackBar("Failed to load employee: $e");
@@ -181,6 +182,7 @@ class _EmployeePageState extends ConsumerState<EmployeePage> {
       name: _name,
       salary: _salary,
       color: _color,
+      createdAt: _existingEmployee?.createdAt ?? DateTime.now(),
       disabled: _disabled,
     );
 
