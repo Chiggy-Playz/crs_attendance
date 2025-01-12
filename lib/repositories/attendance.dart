@@ -42,6 +42,10 @@ class AttendanceRepository {
   Future<void> updateAttendances(List<AttendanceModel> attendances) {
     final batch = _firestore.batch();
     for (final attendance in attendances) {
+      if (attendance.status == AttendanceStatus.choose) {
+        batch.delete(_attendanceCollection.doc(attendance.id));
+        continue;
+      }
       batch.set(_attendanceCollection.doc(attendance.id), attendance.toJson());
     }
     return batch.commit();

@@ -158,8 +158,7 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
               ? null
               : attendance.status,
           onSelected: (value) {
-            _attendances[_attendances.indexOf(attendance)] =
-                attendance.copyWith(status: value);
+            updateAttendance(attendance.id, attendance.copyWith(status: value));
           },
         ),
       ),
@@ -184,8 +183,8 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
                 ? null
                 : attendance.status,
             onSelected: (value) {
-              _attendances[_attendances.indexOf(attendance)] =
-                  attendance.copyWith(status: value);
+              updateAttendance(
+                  attendance.id, attendance.copyWith(status: value));
             },
           ),
         ),
@@ -197,9 +196,8 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
           ),
           initialValue: attendance.remarks,
           onChanged: (value) {
-            _attendances[_attendances
-                    .indexWhere((element) => element.id == attendance.id)] =
-                attendance.copyWith(remarks: value);
+            updateAttendance(
+                attendance.id, attendance.copyWith(remarks: value));
           },
         ),
         const Gap(16),
@@ -251,12 +249,15 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
 
     setState(() {
       if (type == "in") {
-        _attendances[_attendances.indexOf(attendance)] =
-            attendance.copyWith(timeIn: time);
+        updateAttendance(attendance.id, attendance.copyWith(timeIn: time));
       } else {
-        _attendances[_attendances.indexOf(attendance)] =
-            attendance.copyWith(timeOut: time);
+        updateAttendance(attendance.id, attendance.copyWith(timeOut: time));
       }
     });
+  }
+
+  void updateAttendance(String id, AttendanceModel updatedAttendance) {
+    final index = _attendances.indexWhere((element) => element.id == id);
+    _attendances[index] = updatedAttendance;
   }
 }
