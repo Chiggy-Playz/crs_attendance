@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class UnauthorizedPage extends ConsumerWidget {
   const UnauthorizedPage({super.key});
@@ -26,6 +27,7 @@ class UnauthorizedPage extends ConsumerWidget {
               icon: const Icon(Icons.logout),
               label: const Text("Log out"),
               onPressed: () async {
+                await GoogleSignIn().disconnect();
                 await FirebaseAuth.instance.signOut();
               },
             )

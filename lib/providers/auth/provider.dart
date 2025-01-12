@@ -23,8 +23,9 @@ final authProvider = StreamProvider<AuthState>((ref) async* {
 // Function to check if a user is an admin
 Future<bool> _checkIfAdmin(String uid) async {
   try {
-    await FirebaseFirestore.instance.collection('admins').doc(uid).get();
-
+    final doc =
+        await FirebaseFirestore.instance.collection('admins').doc(uid).get();
+    if (!doc.exists) return false;
     return true;
   } on FirebaseException {
     return false;
