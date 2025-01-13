@@ -33,8 +33,6 @@ class AttendanceStatusMapper extends EnumMapper<AttendanceStatus> {
         return AttendanceStatus.absent;
       case 'halfDay':
         return AttendanceStatus.halfDay;
-      case 'leave':
-        return AttendanceStatus.leave;
       case 'holiday':
         return AttendanceStatus.holiday;
       default:
@@ -53,8 +51,6 @@ class AttendanceStatusMapper extends EnumMapper<AttendanceStatus> {
         return 'absent';
       case AttendanceStatus.halfDay:
         return 'halfDay';
-      case AttendanceStatus.leave:
-        return 'leave';
       case AttendanceStatus.holiday:
         return 'holiday';
     }

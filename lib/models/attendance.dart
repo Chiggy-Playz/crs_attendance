@@ -9,7 +9,6 @@ enum AttendanceStatus {
   present,
   absent,
   halfDay,
-  leave,
   holiday,
 }
 

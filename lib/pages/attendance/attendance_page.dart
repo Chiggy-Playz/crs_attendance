@@ -3,12 +3,14 @@ import 'package:crs_attendance/models/attendance.dart';
 import 'package:crs_attendance/models/employee.dart';
 import 'package:crs_attendance/providers/attendance/provider.dart';
 import 'package:crs_attendance/providers/employees/provider.dart';
+import 'package:crs_attendance/providers/home/provider.dart';
 import 'package:crs_attendance/widgets/color_listtile.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 final entries = AttendanceStatus.values
     .where(
@@ -135,10 +137,13 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.save),
-        onPressed: () {
-          ref
+        onPressed: () async {
+          await ref
               .read(attendanceRepositoryProvider)
               .updateAttendances(_attendances);
+          ref.read(calendarControllerProvider).view = CalendarView.week;
+          ref.read(calendarControllerProvider).view = CalendarView.month;
+          if (!context.mounted) return;
           context.pop();
         },
       ),

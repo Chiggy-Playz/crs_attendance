@@ -33,7 +33,9 @@ class EmployeeRepository {
   }
 
   Future<void> addEmployee(EmployeeModel employee) {
-    return _employeesCollection.add(employee.toJson()..remove('id'));
+    final id = _employeesCollection.doc().id;
+    employee = employee.copyWith(id: id);
+    return _employeesCollection.doc(id).set(employee.toJson());
   }
 
   Future<void> updateEmployee(EmployeeModel employee) {
