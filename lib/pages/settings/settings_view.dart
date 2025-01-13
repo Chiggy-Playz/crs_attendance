@@ -1,3 +1,4 @@
+import 'package:crs_attendance/config/constants.dart';
 import 'package:crs_attendance/pages/settings/widgets/settings_group_widget.dart';
 import 'package:crs_attendance/pages/settings/widgets/theme_settings_group.dart';
 import 'package:crs_attendance/providers/settings/provider.dart';
@@ -41,6 +42,13 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
                     await FirebaseAuth.instance.signOut();
                   },
                 ),
+              ]),
+              SettingsGroupWidget(title: "About", children: [
+                ListTile(
+                  leading: const Icon(Icons.info),
+                  title: const Text("Version"),
+                  subtitle: Text(cAppVersion),
+                )
               ])
             ],
           );
