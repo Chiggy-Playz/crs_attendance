@@ -94,6 +94,8 @@ class _MeetingDataSource extends CalendarDataSource {
     startDate = DateTime(startDate.year, startDate.month, startDate.day);
     endDate = DateTime(endDate.year, endDate.month, endDate.day, 23, 59, 59);
 
+    final dateWiseMeetings = <DateTime, List<AttendanceModel>>{};
+
     try {
       // Get all attendances between startDate and endDate
       // Date is stored as utc iso8601 string in firestore
@@ -118,22 +120,37 @@ class _MeetingDataSource extends CalendarDataSource {
       for (final QueryDocumentSnapshot<Map<String, dynamic>> attendanceRaw
           in attendances.docs) {
         final attendance = AttendanceModel.fromJson(attendanceRaw.data());
-        final employee = employees[attendance.employeeId]!;
-        final appointment = Appointment(
-          startTime: attendance.date,
-          endTime: attendance.date.add(const Duration(hours: 1)),
-          subject: employee.name,
-          color: employee.color,
-          isAllDay: true,
-          notes: attendance.status.name,
-        );
-
         if (attendance.status == AttendanceStatus.choose) {
           continue;
         }
+        if (dateWiseMeetings.containsKey(attendance.date)) {
+          dateWiseMeetings[attendance.date]!.add(attendance);
+        } else {
+          dateWiseMeetings[attendance.date] = [attendance];
+        }
+      }
 
-        if (appointments == null || !appointments!.contains(appointment)) {
-          meetings.add(appointment);
+      // Loop over dateWiseMeetings and add to appointments by sorting the list based on employee name
+      for (final date in dateWiseMeetings.keys.toList()..sort()) {
+        final attendances = dateWiseMeetings[date]!;
+        attendances.sort((a, b) => employees[a.employeeId]!
+            .name
+            .compareTo(employees[b.employeeId]!.name));
+        int i = 0;
+        for (final attendance in attendances) {
+          final employee = employees[attendance.employeeId]!;
+          final appointment = Appointment(
+            startTime: attendance.date.add(Duration(hours: i)),
+            endTime: attendance.date.add(Duration(hours: i + 1)),
+            subject: employee.id,
+            color: employee.color,
+            notes: attendance.status.name,
+            id: attendance.id,
+          );
+          if (appointments == null || !appointments!.contains(appointment)) {
+            meetings.add(appointment);
+          }
+          i += 1;
         }
       }
     } catch (e) {
