@@ -43,6 +43,7 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
   bool _isLoading = false;
   bool _showAdvanced = false;
   final _attendances = <AttendanceModel>[];
+  final _employees = <String, EmployeeModel>{};
 
   @override
   void initState() {
@@ -55,10 +56,13 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
 
     final attendances =
         await ref.read(attendanceRepositoryProvider).getAttendanceByDate(_date);
-    final employees =
-        await ref.read(employeeRepositoryProvider).watchEmployees().first;
+    final employees = {
+      for (var element
+          in await ref.read(employeeRepositoryProvider).watchEmployees().first)
+        element.id: element
+    };
 
-    for (final employee in employees
+    for (final employee in employees.values.toList()
       ..sort((a, b) => a.name.compareTo(b.name))) {
       final attendance = attendances.firstWhere(
         (attendance) => attendance.employeeId == employee.id,
@@ -108,29 +112,13 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
                     itemBuilder: (context, index) {
                       final attendance = _attendances[index];
 
-                      return FutureBuilder(
-                        future: ref
-                            .watch(employeeRepositoryProvider)
-                            .getEmployee(attendance.employeeId),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return Container();
-                          }
+                      final employee = _employees[attendance.employeeId]!;
 
-                          if (!snapshot.hasData) {
-                            return const Text("Employee not found");
-                          }
+                      if (!_showAdvanced) {
+                        return simpleCard(attendance, employee);
+                      }
 
-                          final employee = snapshot.data as EmployeeModel;
-
-                          if (!_showAdvanced) {
-                            return simpleCard(attendance, employee);
-                          }
-
-                          return advancedCard(attendance, employee);
-                        },
-                      );
+                      return advancedCard(attendance, employee);
                     },
                   )
             : const Center(child: CircularProgressIndicator()),
