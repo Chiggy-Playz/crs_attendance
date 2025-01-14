@@ -43,7 +43,7 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
   bool _isLoading = false;
   bool _showAdvanced = false;
   final _attendances = <AttendanceModel>[];
-  final _employees = <String, EmployeeModel>{};
+  Map<String, EmployeeModel> _employees = {};
 
   @override
   void initState() {
@@ -56,13 +56,13 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
 
     final attendances =
         await ref.read(attendanceRepositoryProvider).getAttendanceByDate(_date);
-    final employees = {
+    _employees = {
       for (var element
           in await ref.read(employeeRepositoryProvider).watchEmployees().first)
         element.id: element
     };
 
-    for (final employee in employees.values.toList()
+    for (final employee in _employees.values.toList()
       ..sort((a, b) => a.name.compareTo(b.name))) {
       final attendance = attendances.firstWhere(
         (attendance) => attendance.employeeId == employee.id,
