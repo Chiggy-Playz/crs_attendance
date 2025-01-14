@@ -44,6 +44,7 @@ dependencies:
   package_info_plus: ^8.1.2
   riverpod_annotation: ^2.6.1
   shared_preferences: ^2.3.5
+  shorebird_code_push: ^1.1.6
   syncfusion_flutter_calendar: ^27.2.5
 
 dev_dependencies:

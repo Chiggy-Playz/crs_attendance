@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shorebird_code_push/shorebird_code_push.dart';
 
 class SettingsView extends ConsumerStatefulWidget {
   const SettingsView({super.key});
@@ -18,6 +19,8 @@ class SettingsView extends ConsumerStatefulWidget {
 }
 
 class _SettingsViewState extends ConsumerState<SettingsView> {
+  final shorebirdCodePush = ShorebirdCodePush();
+
   @override
   Widget build(BuildContext context) {
     var settings = ref.watch(settingsNotifierProvider);
@@ -48,11 +51,38 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
                   leading: const Icon(Icons.info),
                   title: const Text("Version"),
                   subtitle: Text(cAppVersion),
-                )
+                ),
+                FutureBuilder(
+                  future: shorebirdInfo(),
+                  builder: (context, snapshot) {
+                    String subtitle;
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      subtitle = "${snapshot.data?.$1}";
+                    } else {
+                      subtitle = "Loading...";
+                    }
+                    bool updateAvailable = snapshot.data?.$2 == true;
+                    return ListTile(
+                      leading: const Icon(Icons.update),
+                      title: const Text("Patch Version"),
+                      subtitle: Text(subtitle),
+                      trailing: updateAvailable
+                          ? const Icon(Icons.new_releases)
+                          : null,
+                      onTap: updateAvailable ? shorebirdCodePush.downloadUpdateIfAvailable : null,
+                    );
+                  },
+                ),
               ])
             ],
           );
         });
   }
+
+  Future<(int, bool)> shorebirdInfo() async {
+    return (
+      await shorebirdCodePush.currentPatchNumber() ?? 0,
+      await shorebirdCodePush.isNewPatchAvailableForDownload()
+    );
+  }
 }
-//dws3wt54frws4rwseadswsgrxdedcyjccgf/v/e
