@@ -37,6 +37,7 @@ class _ReportViewState extends ConsumerState<ReportView> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    const Gap(8),
                     DropdownMenu(
                       dropdownMenuEntries: data.map((employee) {
                         return DropdownMenuEntry(

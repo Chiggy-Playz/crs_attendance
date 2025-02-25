@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crs_attendance/config/extensions.dart';
 import 'package:crs_attendance/models/attendance.dart';
 import 'package:flutter/material.dart';
 
@@ -56,21 +57,31 @@ class AttendanceRepository {
       String employeeId, DateTimeRange dateRange) async {
     final snapshot = await _attendanceCollection
         .where("employeeId", isEqualTo: employeeId)
-        .where("date",
-            isGreaterThanOrEqualTo: dateRange.start
-                .add(const Duration(days: -1))
-                .copyWith(hour: 0, minute: 0)
-                .toIso8601String())
-        .where("date",
-            isLessThanOrEqualTo:
-                dateRange.end.copyWith(hour: 23, minute: 59).toIso8601String())
+        .where(
+          "date",
+          isGreaterThanOrEqualTo: dateRange.start
+              .add(const Duration(days: -1))
+              .copyWith(hour: 0, minute: 0)
+              .toIso8601String(),
+        )
+        .where(
+          "date",
+          isLessThanOrEqualTo: dateRange.end.toIso8601String(),
+        )
         .get();
-    return snapshot.docs.map((doc) {
-      final data = doc.data() as Map<String, dynamic>;
-      return AttendanceModel.fromJson({
-        ...data,
-        'id': doc.id,
-      });
-    }).toList();
+    return snapshot.docs
+        .map((doc) {
+          final data = doc.data() as Map<String, dynamic>;
+          return AttendanceModel.fromJson({
+            ...data,
+            'id': doc.id,
+          });
+        })
+        .where((attendance) =>
+            (attendance.date.isAfter(dateRange.start.onlyDate()) ||
+                attendance.date.isAtSameMomentAs(dateRange.start.onlyDate())) &&
+            (attendance.date.isBefore(dateRange.end) ||
+                attendance.date.isAtSameMomentAs(dateRange.end)))
+        .toList();
   }
 }
