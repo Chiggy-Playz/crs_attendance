@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crs_attendance/models/attendance.dart';
+import 'package:flutter/material.dart';
 
 class AttendanceRepository {
   final FirebaseFirestore _firestore;
@@ -49,5 +50,27 @@ class AttendanceRepository {
       batch.set(_attendanceCollection.doc(attendance.id), attendance.toJson());
     }
     return batch.commit();
+  }
+
+  Future<List<AttendanceModel>> getAttendanceForEmployee(
+      String employeeId, DateTimeRange dateRange) async {
+    final snapshot = await _attendanceCollection
+        .where("employeeId", isEqualTo: employeeId)
+        .where("date",
+            isGreaterThanOrEqualTo: dateRange.start
+                .add(const Duration(days: -1))
+                .copyWith(hour: 0, minute: 0)
+                .toIso8601String())
+        .where("date",
+            isLessThanOrEqualTo:
+                dateRange.end.copyWith(hour: 23, minute: 59).toIso8601String())
+        .get();
+    return snapshot.docs.map((doc) {
+      final data = doc.data() as Map<String, dynamic>;
+      return AttendanceModel.fromJson({
+        ...data,
+        'id': doc.id,
+      });
+    }).toList();
   }
 }

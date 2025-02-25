@@ -17,7 +17,10 @@ class EmployeeRepository {
           ...data,
           'id': doc.id,
         });
-      }).toList();
+      }).toList()
+        ..sort(
+          (a, b) => a.name.compareTo(b.name),
+        );
     });
   }
 

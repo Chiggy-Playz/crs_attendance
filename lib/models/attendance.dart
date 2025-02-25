@@ -3,13 +3,28 @@ import 'package:flutter/material.dart';
 
 part 'attendance.mapper.dart';
 
+
 @MappableEnum()
 enum AttendanceStatus {
   choose,
   present,
   absent,
   halfDay,
-  holiday,
+  holiday;
+
+  IconData get icon => {
+        AttendanceStatus.present: Icons.check,
+        AttendanceStatus.absent: Icons.close,
+        AttendanceStatus.halfDay: Icons.hourglass_bottom,
+        AttendanceStatus.holiday: Icons.remove,
+      }[this]!;
+  
+  Color get color => {
+       AttendanceStatus.present: Colors.green,
+        AttendanceStatus.absent: Colors.red,
+        AttendanceStatus.halfDay: Colors.orange,
+        AttendanceStatus.holiday: Colors.blue,
+      }[this]!;
 }
 
 class TimeOfDayMapper extends SimpleMapper<TimeOfDay> {

@@ -15,6 +15,10 @@ const navigationBarDestinations = [
     label: 'Employees',
   ),
   NavigationDestination(
+    icon: Icon(Icons.summarize),
+    label: 'Report',
+  ),
+  NavigationDestination(
     icon: Icon(Icons.settings_rounded),
     label: 'Settings',
   ),

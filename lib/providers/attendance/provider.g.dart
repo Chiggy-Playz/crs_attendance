@@ -196,5 +196,159 @@ class _AttendanceByDateProviderElement
   @override
   DateTime get date => (origin as AttendanceByDateProvider).date;
 }
+
+String _$attendanceByEmployeeHash() =>
+    r'b1884e29a58f8ca804d526d9be3e4d28cc9e1638';
+
+/// See also [attendanceByEmployee].
+@ProviderFor(attendanceByEmployee)
+const attendanceByEmployeeProvider = AttendanceByEmployeeFamily();
+
+/// See also [attendanceByEmployee].
+class AttendanceByEmployeeFamily
+    extends Family<AsyncValue<List<AttendanceModel>>> {
+  /// See also [attendanceByEmployee].
+  const AttendanceByEmployeeFamily();
+
+  /// See also [attendanceByEmployee].
+  AttendanceByEmployeeProvider call(
+    String employeeId,
+    DateTimeRange dateRange,
+  ) {
+    return AttendanceByEmployeeProvider(
+      employeeId,
+      dateRange,
+    );
+  }
+
+  @override
+  AttendanceByEmployeeProvider getProviderOverride(
+    covariant AttendanceByEmployeeProvider provider,
+  ) {
+    return call(
+      provider.employeeId,
+      provider.dateRange,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'attendanceByEmployeeProvider';
+}
+
+/// See also [attendanceByEmployee].
+class AttendanceByEmployeeProvider
+    extends AutoDisposeFutureProvider<List<AttendanceModel>> {
+  /// See also [attendanceByEmployee].
+  AttendanceByEmployeeProvider(
+    String employeeId,
+    DateTimeRange dateRange,
+  ) : this._internal(
+          (ref) => attendanceByEmployee(
+            ref as AttendanceByEmployeeRef,
+            employeeId,
+            dateRange,
+          ),
+          from: attendanceByEmployeeProvider,
+          name: r'attendanceByEmployeeProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$attendanceByEmployeeHash,
+          dependencies: AttendanceByEmployeeFamily._dependencies,
+          allTransitiveDependencies:
+              AttendanceByEmployeeFamily._allTransitiveDependencies,
+          employeeId: employeeId,
+          dateRange: dateRange,
+        );
+
+  AttendanceByEmployeeProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.employeeId,
+    required this.dateRange,
+  }) : super.internal();
+
+  final String employeeId;
+  final DateTimeRange dateRange;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<AttendanceModel>> Function(AttendanceByEmployeeRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: AttendanceByEmployeeProvider._internal(
+        (ref) => create(ref as AttendanceByEmployeeRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        employeeId: employeeId,
+        dateRange: dateRange,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<AttendanceModel>> createElement() {
+    return _AttendanceByEmployeeProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is AttendanceByEmployeeProvider &&
+        other.employeeId == employeeId &&
+        other.dateRange == dateRange;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, employeeId.hashCode);
+    hash = _SystemHash.combine(hash, dateRange.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin AttendanceByEmployeeRef
+    on AutoDisposeFutureProviderRef<List<AttendanceModel>> {
+  /// The parameter `employeeId` of this provider.
+  String get employeeId;
+
+  /// The parameter `dateRange` of this provider.
+  DateTimeRange get dateRange;
+}
+
+class _AttendanceByEmployeeProviderElement
+    extends AutoDisposeFutureProviderElement<List<AttendanceModel>>
+    with AttendanceByEmployeeRef {
+  _AttendanceByEmployeeProviderElement(super.provider);
+
+  @override
+  String get employeeId => (origin as AttendanceByEmployeeProvider).employeeId;
+  @override
+  DateTimeRange get dateRange =>
+      (origin as AttendanceByEmployeeProvider).dateRange;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

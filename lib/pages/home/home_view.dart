@@ -9,13 +9,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-final statusToIcons = {
-  AttendanceStatus.present: (Icons.check, Colors.green),
-  AttendanceStatus.absent: (Icons.close, Colors.red),
-  AttendanceStatus.halfDay: (Icons.hourglass_bottom, Colors.orange),
-  AttendanceStatus.holiday: (Icons.remove, Colors.blue),
-};
-
 class HomeView extends ConsumerStatefulWidget {
   const HomeView({super.key});
 
@@ -52,8 +45,8 @@ class _HomeViewState extends ConsumerState<HomeView> {
             ),
             const SizedBox(width: 12),
             Icon(
-              statusToIcons[status]!.$1,
-              color: statusToIcons[status]!.$2,
+              status.icon,
+              color: status.color,
               size: details.bounds.height,
             ),
           ],

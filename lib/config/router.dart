@@ -5,6 +5,7 @@ import 'package:crs_attendance/pages/home/home_view.dart';
 import 'package:crs_attendance/pages/home_shell_page.dart';
 import 'package:crs_attendance/pages/loading/loading_page.dart';
 import 'package:crs_attendance/pages/login/login.dart';
+import 'package:crs_attendance/pages/report/report_view.dart';
 import 'package:crs_attendance/pages/settings/settings_view.dart';
 import 'package:crs_attendance/pages/unauthorized/unauthorized.dart';
 import 'package:crs_attendance/providers/auth/provider.dart';
@@ -86,6 +87,15 @@ GoRouter router(Ref ref) {
               ),
             ],
           ),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: ReportView.routePath,
+              builder: (context, state) {
+                return const ReportView();
+              },
+
+            )
+          ]),
           StatefulShellBranch(
             routes: [
               GoRoute(
